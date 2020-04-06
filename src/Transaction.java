@@ -1,6 +1,5 @@
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 public class Transaction {
@@ -10,8 +9,8 @@ public class Transaction {
     public float value;
     public byte[] signature;
 
-    public ArrayList<TransactionInput> inputs = new ArrayList<TransactionInput>();
-    public ArrayList<TransactionOutput> outputs = new ArrayList<TransactionOutput>();
+    public ArrayList<TransactionInput> inputs;
+    public ArrayList<TransactionOutput> outputs = new ArrayList<>();
 
     private static int sequence = 0;
 
@@ -27,7 +26,7 @@ public class Transaction {
         return StringUtil.applySha256(
                 StringUtil.getStringFromKey(sender) +
                         StringUtil.getStringFromKey(reciepient) +
-                        Float.toString(value)+
+                        value+
                         sequence
         );
     }
@@ -42,7 +41,7 @@ public class Transaction {
     }
 
     public boolean processTransaction(){
-        if (verifySignature()==false){
+        if (!verifySignature()){
             System.out.println("#Transaction Signature failed to verify");
             return false;
         }
